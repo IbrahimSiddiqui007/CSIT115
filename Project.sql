@@ -4,30 +4,15 @@ use Project_system;
 create table SpecialFood(
 SFName varchar(50) unique Primary Key,
 Amnt varchar(30),
-FAmnt varchar(50),
-Diagnosis varchar(200),
-SInstructions varchar(100),
-Price int,
-foreign key (FAmnt) references MedInformation(FDosage),
-foreign key (Diagnosis) references MedInformation(Diagnosis),
-foreign key (SInstructions) references MedInformation(SInstructions),
-foreign key (Price) references MedInformation(Price),
 foreign key (SFName) references MedInformation(MSFName)
 );
 
 create table medicines(
 MName varchar(50) unique Primary key,
 PDosage varchar(30),
-FDosage varchar(50),
-Diagnosis varchar(200),
-SInstructions varchar(100),
-Price int,
-foreign key (FDosage) references MedInformation(FDosage),
-foreign key (Diagnosis) references MedInformation(Diagnosis),
-foreign key (SInstructions) references MedInformation(SInstructions),
-foreign key (Price) references MedInformation(Price),
 foreign key (MName) references MedInformation(MSFName)
 );
+
 
 create table MedInformation(
 CName varchar(100),
@@ -42,7 +27,6 @@ Foreign key (CName) references Pets(CName),
 foreign key (PName) references pets(PName)
 );
 
-
 create table Pets(
 CName varchar(100),
 PName varchar(100),
@@ -53,10 +37,11 @@ DOB date,
 LWeight int,
 Breed varchar(50),
 Spcs varchar(100),
-primary key (CName,PName,CTPrimary),
+primary key (PName, CTPrimary),
 foreign key (CName) references Customer(CName),
 foreign key (CTPrimary) references Customer(CTPrimary)
 );
+
 
 create table Customer(
 CName varchar(100),
