@@ -8,7 +8,7 @@ FAmnt varchar(50),
 Diagnosis varchar(200),
 SInstructions varchar(100),
 Price int,
-foreign key (FDosage) references MedInformation(FDosage),
+foreign key (FAmnt) references MedInformation(FDosage),
 foreign key (Diagnosis) references MedInformation(Diagnosis),
 foreign key (SInstructions) references MedInformation(SInstructions),
 foreign key (Price) references MedInformation(Price),
@@ -38,9 +38,10 @@ Diagnosis varchar(200),
 SInstructions varchar(100),
 Price int,
 Primary key (CName, PName, MSFName),
-Foreign key (PName) references Pets(PName),
-Foreign key (CName) references Pets(CName)
+Foreign key (CName) references Pets(CName),
+foreign key (PName) references pets(PName)
 );
+
 
 create table Pets(
 CName varchar(100),
@@ -54,15 +55,15 @@ Breed varchar(50),
 Spcs varchar(100),
 primary key (CName,PName,CTPrimary),
 foreign key (CName) references Customer(CName),
-foreign key (CTPrimary) references Customer(TPrimary)
+foreign key (CTPrimary) references Customer(CTPrimary)
 );
 
 create table Customer(
 CName varchar(100),
 CAddress varchar(100),
-TPrimary int unique,
+CTPrimary int unique,
 SPrimary int unique,
-primary key (Cname, TPrimary)
+primary key (CName, CTPrimary)
 );
 
 create table Appointment(
@@ -73,13 +74,19 @@ AppTime date,
 AppDate date,
 Pvisit varchar(50),
 Fee int,
-primary key (Cname, TPrimary),
+primary key (CName, TPrimary),
 foreign key (CName) references Customer(CName),
-foreign key (TPrimary) references Customer(TPrimary)
+foreign key (TPrimary) references Customer(CTPrimary)
+);
+
+create table Legal_Req(
+DName varchar(100),
+Req varchar(500),
+foreign key (DName) references Disease(DName)
 );
 
 create table Disease(
-DName varchar(50),
+DName varchar(50) primary key,
 DSymptoms varchar(300)
 );
 
@@ -88,13 +95,14 @@ CName varchar(100),
 VName varchar(100),
 DName varchar(50),
 VDate date, 
+primary key (CName,VName,DName),
 Foreign key (CName) references Pets(CName),
 Foreign key (VName) references Vaccination(VName),
 Foreign key (DName) references Disease(DName)
 );
 
 create table Vaccination(
-VName varchar(100),
+VName varchar(100) primary key,
 VacFrequency varchar(25),
 VacDosage int
 );
