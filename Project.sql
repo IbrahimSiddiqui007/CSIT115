@@ -77,13 +77,15 @@ DSymptoms varchar(300)
 
 create table VacPet(
 CName varchar(100),
+PName varchar(100),
 VName varchar(100),
 DName varchar(50),
 VDate date, 
-primary key (CName,VName,DName),
+primary key (CName,PName,VName,DName),
 Foreign key (CName) references Pets(CName),
 Foreign key (VName) references Vaccination(VName),
-Foreign key (DName) references Disease(DName)
+Foreign key (DName) references Disease(DName),
+Foreign key (PName) references Pets(PName)
 );
 
 create table Vaccination(
@@ -91,3 +93,19 @@ VName varchar(100) primary key,
 VacFrequency varchar(25),
 VacDosage int
 );
+
+-- For testing --
+drop table VacPet;
+drop table Vaccination;
+drop table Disease;
+drop table Legal_Req;
+drop table Pets;
+drop table Customer;
+drop table Appointment;
+drop table Customer;
+drop table Customer;
+drop table Customer;
+
+
+-- TASK 4: Show all the vaccination records for all pets --
+select v.VName, v.VacFrequency, v.VacDosage, d.DName, lq.Req, p.CName, p.PName, p.CTPrimary, p.Breed, p.Spcs from Vaccination as v, Disease as D, Legal_Req as lq, Pets as p, VacPets as vp where p.PName=vp.PName
