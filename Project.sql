@@ -29,7 +29,7 @@ foreign key (PName) references pets(PName)
 create table Pets(
 CName varchar(100),
 PName varchar(100),
-CTPrimary int unique,
+CTPrimary varchar(10) unique,
 PColor varchar(50),
 PSex enum("Male","Female"),
 DOB date,
@@ -44,7 +44,7 @@ foreign key (CTPrimary) references Customer(CTPrimary)
 create table Customer(
 CName varchar(100),
 CAddress varchar(100),
-CTPrimary int unique,
+CTPrimary varchar(10) unique,
 SPrimary int unique,
 primary key (CName, CTPrimary)
 );
@@ -52,14 +52,15 @@ primary key (CName, CTPrimary)
 create table Appointment(
 CName varchar(100),
 PName varchar(100),
-TPrimary int unique,
+TPrimary varchar(10) unique,
 AppTime date,
 AppDate date,
 Pvisit varchar(50),
 Fee int,
 primary key (CName, TPrimary),
 foreign key (CName) references Customer(CName),
-foreign key (TPrimary) references Customer(CTPrimary)
+foreign key (TPrimary) references Customer(CTPrimary),
+foreign key (PName) references Pets(PName)
 );
 
 create table Legal_Req(
@@ -74,7 +75,7 @@ DSymptoms varchar(300)
 );
 
 create table VacPet(
-CTPrimary int,
+CTPrimary varchar(10),
 PName varchar(100),
 VName varchar(100),
 DName varchar(50),
@@ -105,27 +106,29 @@ drop table medicines;
 drop table SpecialFood;
 
 -- Insert for Customer --
-insert into Customer values ('Anna','Springs,UAE',971502345645,0566788934);
-insert into Customer values ('Bob','Arabian Ranches,UAE',971508976767,9715078678);
-insert into Customer values ('Thomas','Arabian Ranches,UAE',971508947872,0566788934);
-insert into Customer values ('Sandra','Jumeirah Village Circle, UAE',971502998765,971507776543);
-insert into Customer values ('Jeremy','Meadows,UAE',0506543749,971503454485);
+insert into Customer values ('Anna','Springs,UAE',0502345645,0566788934);
+insert into Customer values ('Bob','Arabian Ranches,UAE',0508976767,0507867892);
+insert into Customer values ('Thomas','Arabian Ranches,UAE',0523039378,0564355628);
+insert into Customer values ('Sandro','Jumeirah Village Circle, UAE',0502998765,0507776543);
+insert into Customer values ('Jeremy','Meadows,UAE',0506543749,0503454485);
+
+select * from customer;
 
 -- Insert For Appointment --
-insert into Appointment values ();
-insert into Appointment values ();
-insert into Appointment values ();
-insert into Appointment values ();
-insert into Appointment values ();
-insert into Appointment values ();
-insert into Appointment values ();
+insert into Appointment values ('Anna','Max',971502345645,TIME_FORMAT("19:30:10", "%H %i %s"),,,);
+insert into Appointment values ('Anna','Max',971502345645,,,,);
+insert into Appointment values ('Bob','Leo',971508976767,,,,);
+insert into Appointment values ('Bob','Leo',971508976767,,,,);
+insert into Appointment values ('Sandro','Koko',971502998765,,,,);
+insert into Appointment values ('Sandro','Abby',971502998765,,,,);
+insert into Appointment values ('Sandro','Abby',971502998765,,,,);
 
 -- Insert for Pets --
 insert into Pets values ('Anna','Max',971502345645,'Black',Male,2018-08-31,32,'Labrador','Dog');
 insert into Pets values ('Bob','Leo',971508976767,'Brown and White',Male,2015-01-15,10,'Beagle','Dog');
-insert into Pets values ('Thomas','Luna',971502345645,'Grey',Female,2018-06-11,28,'Greyhound','Dog');
-insert into Pets values ('Sandra','Abby',971502998765,'White',Female,2012-03-01,6,'Ragdoll','Cat');
-insert into Pets values ('Sandra','Koko',971502998765,'White',Male,2020-02-04,7,'Siamese','Cat');
+insert into Pets values ('Thomas','Luna',971523039378,'Grey',Female,2018-06-11,28,'Greyhound','Dog');
+insert into Pets values ('Sandro','Abby',971502998765,'White',Female,2012-03-01,6,'Ragdoll','Cat');
+insert into Pets values ('Sandro','Koko',971502998765,'White',Male,2020-02-04,7,'Siamese','Cat');
 insert into Pets values ('Jeremy','Zoe',0506543749,'Green',Female,2021-07-25,0.03,'Parrotlet','Bird');
 
 -- Insert for Medicine --
@@ -135,18 +138,38 @@ insert into medicines values ('Beaphar Multi-Vit Parrots Healthcare Supplements 
 insert into medicines values ('VetPlus Coatex for Hair and Skin Care for Dogs and Cats in Capsules','100 grams','Daily dosage of 1 capsule','Hair loss, dry or reddened skin, dandruff, and flaking','n/a',64);
 
 -- Insert for Vaccination --
-insert into Vaccination values ('RABVAC 1','Once every year',3);
+insert into Vaccination values ('RABVAC','Once every year',1);
 insert into Vaccination values ('DHPP','Once every 3 years',3);
-insert into Vaccination values ('DA2PP','Once every year',3);
+insert into Vaccination values ('DA2PP','Once every year',1);
 insert into Vaccination values ('FVRCP','Once every 3 years',3);
-insert into Vaccination values ('FeLV','Once every year',3);
+insert into Vaccination values ('FeLV','Once every year',1);
+insert into Vaccination values ('NOBIVAC','Once every year',1);
+insert into Vaccination values ('Nystatin','Once every 3 years',3);
 
 -- Insert for VacPet --
-insert into VacPet values (971502345645,'','RABVAC 1','Rabies',2020-06-11);
-insert into VacPet values (971508976767,'','DHPP','Distemper',2021-09-27);
-insert into VacPet values (971502345645,'','DHPP','Distemper',2020-11-19);
-insert into VacPet values (971502998765,'','FVRCP','Feline Viral Rhinotracheitis',2022-01-21);
-insert into VacPet values (971502345645,'','FeLV','Feline Viral Rhinotracheitis',2018-02-15);
+-- Anna's Pet --
+insert into VacPet values (971502345645,'Max','RABVAC','Rabies',2022-06-11);
+insert into VacPet values (971502345645,'Max','DHPP','Distemper',2020-11-19);
+-- Bob's Pet --
+insert into VacPet values (971508976767,'Leo','DHPP','Distemper',2020-08-21);
+insert into VacPet values (971508976767,'Leo','DA2PP','Rabies',2021-09-27);
+-- Sandro's Pet
+insert into VacPet values (971502998765,'Abby','FVRCP','Feline Viral Rhinotracheitis',2022-01-21);
+insert into VacPet values (971502998765,'Abby','FeLV','Feline Leukaemia',2022-01-21);
+
+insert into VacPet values (971502998765,'Koko','FVRCP','Feline Viral Rhinotracheitis',2021-01-31);
+insert into VacPet values (971502998765,'Koko','FeLV','Feline Calicivirus',2020-03-11);
+insert into VacPet values (971502998765,'Koko','FVRCP','Feline Panleucopaenia',2021-01-31);
+
+-- Thomas's Pet --
+insert into VacPet values (971523039378,'Luna','DHPP','Bordetella',2021-01-31);
+insert into VacPet values (971523039378,'Luna','NOBIVAC','Leptospirosis',2020-03-11);
+insert into VacPet values (971523039378,'Luna','NOBIVAC','Canine Influenza',2021-02-26);
+
+-- Jeremy's Pet --
+insert into VacPet values (971502998765,'Zoe','FVRCP','polyomavirus vaccine',2020-05-31);
+insert into VacPet values (971502998765,'Zoe','Nystatin','candida',2021-04-30);
+-- End Insert for VacPets --
 
 -- Insert for Special Food --
 insert into SpecialFood values ('Zesty Paws, Probiotic Bites for Dogs','90 Soft Chews','Everyday','Gut Function, Gut Health, Immune Function, Gut Flora','Up to 25 lbs, daily amount is 1 Soft Chew, 26-75 lbs, daily amount is 2 Soft Chews, Over 75 lbs, Daily amount is 3 Soft Chews',115);
