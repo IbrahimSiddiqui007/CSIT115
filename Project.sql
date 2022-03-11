@@ -115,13 +115,13 @@ insert into Customer values ('Jeremy','Meadows,UAE',0506543749,0503454485);
 select * from customer;
 
 -- Insert For Appointment --
-insert into Appointment values ('Anna','Max',971502345645,TIME_FORMAT("19:30:10", "%H %i %s"),,,);
-insert into Appointment values ('Anna','Max',971502345645,,,,);
-insert into Appointment values ('Bob','Leo',971508976767,,,,);
-insert into Appointment values ('Bob','Leo',971508976767,,,,);
-insert into Appointment values ('Sandro','Koko',971502998765,,,,);
-insert into Appointment values ('Sandro','Abby',971502998765,,,,);
-insert into Appointment values ('Sandro','Abby',971502998765,,,,);
+insert into Appointment values ('Anna','Max',971502345645,TIME_FORMAT("19:30:10", "%H %i %s"),DATE_FORMAT("2020-06-15", "%Y/%m/%d"),'Doctor Visit',300);
+insert into Appointment values ('Anna','Max',971502345645,TIME_FORMAT("15:35:10", "%H %i %s"),DATE_FORMAT("2021-06-11", "%Y/%m/%d"),'Vaccination',500);
+insert into Appointment values ('Bob','Leo',971508976767,TIME_FORMAT("12:45:00", "%H %i %s"),DATE_FORMAT("2020-08-21", "%Y/%m/%d"),'Health Check',150);
+insert into Appointment values ('Bob','Leo',971508976767,TIME_FORMAT("17:00:00", "%H %i %s"),DATE_FORMAT("2022-01-05", "%Y/%m/%d"),'Special Food',150);
+insert into Appointment values ('Sandro','Koko',971502998765,TIME_FORMAT("15:35:10", "%H %i %s"),DATE_FORMAT("2022-02-11", "%Y/%m/%d"),'Medicine',250);
+insert into Appointment values ('Sandro','Abby',971502998765,TIME_FORMAT("15:35:10", "%H %i %s"),DATE_FORMAT("2022-06-11", "%Y/%m/%d"),'Vaccination',500);
+insert into Appointment values ('Sandro','Abby',971502998765,TIME_FORMAT("15:35:10", "%H %i %s"),DATE_FORMAT("2022-06-11", "%Y/%m/%d"),'Doctor Visit',300);
 
 -- Insert for Pets --
 insert into Pets values ('Anna','Max',971502345645,'Black',Male,2018-08-31,32,'Labrador','Dog');
@@ -146,9 +146,18 @@ insert into Vaccination values ('FeLV','Once every year',1);
 insert into Vaccination values ('NOBIVAC','Once every year',1);
 insert into Vaccination values ('Nystatin','Once every 3 years',3);
 
+-- Insert for MedInformation --
+insert into MedInformation values ('Anna','Max','Zesty Paws, Probiotic Bites for Dogs','2 per day','Gut Function, Gut Health','Eat 2 per day',115);
+insert into MedInformation values ('Bob','Leo','Zesty Paws, Probiotic Bites for Dogs','2 per day','Gut Function, Gut Health','Eat 2 per day',115);
+insert into MedInformation values ('Thomas','Luna','Beaphar Fiprotec for Dogs','4 pipettes of 100mg','Apply once every 4 weeks','fleas and ticks','Part the dogs’s fur between the shoulder blades and apply the contents of one pipette to the skin’s surface, ideally split between two areas roughly 2cm apart, one at the base of the head and the second 2-3cm further back. For continuous protection re-apply once every four weeks',95);
+insert into MedInformation values ('Thomas','Luna','Zesty Paws, Probiotic Bites for Dogs','2 per day','Gut Function, Gut Health','Eat 2 per day',115);
+insert into MedInformation values ('Bob','Leo','Zesty Paws, Omega Bites for Dogs','1-2 per day','Skin & Coat','Up to 25 lbs, daily amount is 1 Soft Chew, 26-75 lbs, daily amount is 2 Soft Chews, Over 75 lbs, Daily amount is 3 Soft Chews',115);
+insert into MedInformation values ('Sandra','Koko','VetPlus Coatex for Hair and Skin Care for Dogs and Cats in Capsules','Daily dosage of 1 capsule','Hair loss, dry or reddened skin, dandruff, and flaking','Daily dosage of 1 capsule',64);
+insert into MedInformation values ('Sandra','Abby','Pet Naturals of Vermont, UT Support for Cats','1 per day','Mucosal lining of the urinary tract','Eat 1 per day',45);
+
 -- Insert for VacPet --
 -- Anna's Pet --
-insert into VacPet values (971502345645,'Max','RABVAC','Rabies',2022-06-11);
+insert into VacPet values (971502345645,'Max','RABVAC','Rabies',2021-06-11);
 insert into VacPet values (971502345645,'Max','DHPP','Distemper',2020-11-19);
 -- Bob's Pet --
 insert into VacPet values (971508976767,'Leo','DHPP','Distemper',2020-08-21);
