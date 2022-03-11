@@ -119,8 +119,8 @@ insert into Legal_Req values("Rabies",'Can be administered in one dose, as early
 insert into Legal_Req values('Distemper','At least 3 doses, given between 6 and 16 weeks of age');
 insert into Legal_Req values('Feline Viral Rhinotracheitis','All kittens and adult cats receiving this vaccine for the first time should receive a series of boosters which are separated by 3-4 weeks. The frequency of vaccination thereafter is determined by your veterinarian.');
 insert into Legal_Req values("Canine Influenza",'every 3 years');
-insert into Legal_Req values('Candida','These shots are given every 3 to 4 weeks from the time a puppy is 6 weeks old until he is at least 16 weeks of age.')
-insert into Legal_Req values ('Feline Leukaemia', 'It is recommened annually for cats that go outside and have exposure with other cats and/or live with FeLV ');
+insert into Legal_Req values('Candida','These shots are given every 3 to 4 weeks from the time a puppy is 6 weeks old until he is at least 16 weeks of age.');
+insert into Legal_Req values ('Feline Leukaemia', 'It is recommened annually for cats that go outside and have exposure with other cats and/or live with FeLV');
 insert into Legal_Req values ('Feline Calicivirus', 'Two or three injections are recommended in kittens, starting at around 8 weeks of age');
 insert into Legal_Req values ('Bordetella', 'healthy adult dogs that come into contact with large groups of other dogs should have a Bordetella vaccine annually, and boarding facilities may require a booster within the last six months');
 insert into Legal_Req values ('Leptospirosis', 'Currently available vaccines effectively prevent leptospirosis and protect dogs for at least 12 months. ');
@@ -179,7 +179,7 @@ insert into VacPet values ('0523039378','Luna','NOBIVAC','Leptospirosis',DATE_FO
 insert into VacPet values ('0523039378','Luna','NOBIVAC','Canine Influenza',DATE_FORMAT("2021-02-26", "%Y/%m/%d"));
 
 -- Jeremy's Pet --
-insert into VacPet values ('0506543749','Zoe','FVRCP','polyomavirus vaccine',DATE_FORMAT("2020-05-31", "%Y/%m/%d"));
+insert into VacPet values ('0506543749','Zoe','FVRCP','polyomavirus',DATE_FORMAT("2020-05-31", "%Y/%m/%d"));
 insert into VacPet values ('0506543749','Zoe','Nystatin','candida',DATE_FORMAT("2021-04-30", "%Y/%m/%d"));
 -- End Insert for VacPets --
 
