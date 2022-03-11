@@ -103,9 +103,9 @@ insert into Appointment values ('Anna','Max','0502345645',str_to_date("193010", 
 insert into Appointment values ('Anna','Max','0502345645',str_to_date("153510", "%H%i%s"),DATE_FORMAT("2021-06-11", "%Y/%m/%d"),'Vaccination',500);
 insert into Appointment values ('Bob','Leo','0508976767',str_to_date("124500", "%H%i%s"),DATE_FORMAT("2020-08-21", "%Y/%m/%d"),'Health Check',150);
 insert into Appointment values ('Bob','Leo','0508976767',str_to_date("170000", "%H%i%s"),DATE_FORMAT("2022-01-05", "%Y/%m/%d"),'Special Food',150);
-insert into Appointment values ('Sandro','Koko','0502998765',str_to_date("104010", "%H%i%s"),DATE_FORMAT("2022-02-11", "%Y/%m/%d"),'Medicine',250);
+insert into Appointment values ('Sandro','Abby','0502998765',str_to_date("153510", "%H%i%s"),DATE_FORMAT("2022-01-24", "%Y/%m/%d"),'Doctor Visit',300);
 insert into Appointment values ('Sandro','Abby','0502998765',str_to_date("165010", "%H%i%s"),DATE_FORMAT("2022-03-03", "%Y/%m/%d"),'Vaccination',500);
-insert into Appointment values ('Sandro','Abby','0502998765',str_to_date("153510", "%H%i%s"),DATE_FORMAT("2022-02-24", "%Y/%m/%d"),'Doctor Visit',300);
+insert into Appointment values ('Sandro','Koko','0502998765',str_to_date("153510", "%H%i%s"),DATE_FORMAT("2022-02-24", "%Y/%m/%d"),'Doctor Visit',300);
 
 
 create table Legal_Req(
@@ -163,9 +163,11 @@ Foreign key (PName) references Pets(PName)
 insert into VacPet values ('0502345645','Max','RABVAC','Rabies',DATE_FORMAT("2021-06-11", "%Y/%m/%d"));
 insert into VacPet values ('0502345645','Max','DHPP','Distemper',DATE_FORMAT("2020-11-19", "%Y/%m/%d"));
 -- Bob's Pet --
+
 insert into VacPet values ('0508976767','Leo','DHPP','Distemper',DATE_FORMAT("2020-08-21", "%Y/%m/%d"));
 insert into VacPet values ('0508976767','Leo','DA2PP','Rabies',DATE_FORMAT("2021-09-27", "%Y/%m/%d"));
 -- Sandro's Pet
+
 insert into VacPet values ('0502998765','Abby','FVRCP','Feline Viral Rhinotracheitis',DATE_FORMAT("2022-01-21", "%Y/%m/%d"));
 insert into VacPet values ('0502998765','Abby','FeLV','Feline Leukaemia',DATE_FORMAT("2022-01-21", "%Y/%m/%d"));
 
@@ -181,6 +183,7 @@ insert into VacPet values ('0523039378','Luna','NOBIVAC','Canine Influenza',DATE
 -- Jeremy's Pet --
 insert into VacPet values ('0506543749','Zoe','FVRCP','polyomavirus',DATE_FORMAT("2020-05-31", "%Y/%m/%d"));
 insert into VacPet values ('0506543749','Zoe','Nystatin','candida',DATE_FORMAT("2021-04-30", "%Y/%m/%d"));
+
 -- End Insert for VacPets --
 
 create table Vaccination(
@@ -210,8 +213,32 @@ drop table Appointment;
 drop table MedInformation;
 drop table medicines;
 drop table SpecialFood;
-
 -- 
 
 -- TASK 4: Show all the vaccination records for all pets --
-select v.VName, v.VacFrequency, v.VacDosage, d.DName, lq.Req, p.CName, p.PName, p.CTPrimary, p.Breed, p.Spcs from Vaccination as v, Disease as D, Legal_Req as lq, Pets as p, VacPet as vp;
+select distinct c.CName,vp.CTPrimary,vp.PName,vp.DName,vp.VName,vp.VDate from VacPet as vp, Pets as p, Customer as C  where p.PName=vp.PName and vp.CTPrimary=p.CTPrimary and p.CTPrimary=c.CTPrimary;
+
+-- TASK 4: Show the amount paid by customers for each visit --
+select CName,PName,Fee from appointment;
+
+-- TASK 4: Show the total amount of fees paid by customers for each months for last 3 months --
+SELECT distinct CName, sum(fee) from appointment where AppDate > str_to_date('01/01/2022','%d/%m/%YY') and AppDate < str_to_date('31/01/2022','%d/%m/%YY');
+SELECT distinct CName, sum(fee) from appointment where AppDate > str_to_date('01/02/2022','%d/%m/%YY') and AppDate < str_to_date('28/02/2022','%d/%m/%YY');
+SELECT distinct CName, sum(fee) from appointment where AppDate > str_to_date('01/03/2022','%d/%m/%YY') and AppDate < str_to_date('31/03/2022','%d/%m/%YY');
+
+-- TASK 4: Show the pet with most visits --
+SELECT distinct CDName,PDName,Max(CNT) as visit from (select distinct PName as PDName,CName as CDName,count(PName) as CNT from Appointment group by CName) as subq1, appointment group by CName;
+
+-- Task 4: Show the pets that never visited the clinic --
+select PName from Pets where PName not in(select PName from Appointment);
+
+-- Task 4: Show the pets that received all vaccines --
+select count(VName) from VacPet group by PName;
+select distinct count(VName) from Vaccination, Pets Spcs like 'Dog';
+select distinct count(VName) from VacPet, Pets where VacPet.PName=Pets.PName and Spcs like 'Cat';
+select distinct count(VName) from VacPet, Pets where VacPet.PName=Pets.PName and Spcs like 'Bird';
+
+-- Task 4: Show the name of the medicine or special food that was given to each pet. (IF statement) --
+
+-- Task 4: Show the number of visits and amounts paid for each pet --
+select CName,PName,count(PName) as Number_of_Visits,sum(fee) from appointment group by PName;
