@@ -7,21 +7,12 @@ Amnt varchar(30),
 foreign key (SFName) references MedInformation(MSFName)
 );
 
--- Insert for Special Food --
-insert into SpecialFood values ('Zesty Paws, Probiotic Bites for Dogs','90 Soft Chews');
-insert into SpecialFood values ('Pet Naturals of Vermont, Daily Probiotic, For Cats','30 Soft Chews');
-
 create table medicines(
 MName varchar(100) Primary key,
 PDosage varchar(30),
 foreign key (MName) references MedInformation(MSFName)
 );
 
--- Insert for Medicine --
-insert into medicines values ('Beaphar Fiprotec for Dogs','4 pipettes of 100mg');
-insert into medicines values ('Beaphar Fiprotec for Cats','4 pipettes of 50mg');
-insert into medicines values ('Beaphar Multi-Vit Parrots Healthcare Supplements','20 ml');
-insert into medicines values ('VetPlus Coatex for Hair and Skin Care for Dogs and Cats in Capsules','100 grams');
 
 create table MedInformation(
 CName varchar(100),
@@ -35,14 +26,6 @@ Primary key (MSFName),
 Foreign key (CName) references Pets(CName),
 foreign key (PName) references pets(PName)
 );
-
--- Insert for MedInformation --
-insert into MedInformation values ('Anna','Max','Zesty Paws, Probiotic Bites for Dogs','2 per day','Gut Function, Gut Health','y',115);
-insert into MedInformation values ('Jeremy','Zoe','Beaphar Multi-Vit Parrots Healthcare Supplements','2 per day','General health','',115);
-insert into MedInformation values ('Thomas','Luna','Beaphar Fiprotec for Dogs','4 pipettes of 100mg','fleas and ticks','Part the dogs’s fur between the shoulder blades and apply the contents of one pipette to the skin’s surface, ideally split between two areas roughly 2cm apart, one at the base of the head and the second 2-3cm further back. For continuous protection re-apply once every four weeks',95);
-insert into MedInformation values ('Bob','Leo','VetPlus Coatex for Hair and Skin Care for Dogs and Cats in Capsules','1-2 per day','Skin & Coat','Up to 25 lbs, daily amount is 1 Soft Chew, 26-75 lbs, daily amount is 2 Soft Chews, Over 75 lbs, Daily amount is 3 Soft Chews',115);
-insert into MedInformation values ('Sandro','Koko','Beaphar Fiprotec for Cats','Daily dosage of 1 capsule','Hair loss, dry or reddened skin, dandruff, and flaking','Daily dosage of 1 capsule',64);
-insert into MedInformation values ('Sandro','Abby','Pet Naturals of Vermont, Daily Probiotic, For Cats','1 per day','Mucosal lining of the urinary tract','Eat 1 per day',45);
 
 
 create table Pets(
@@ -59,15 +42,7 @@ primary key (PName, CTPrimary),
 foreign key (CName) references Customer(CName),
 foreign key (CTPrimary) references Customer(CTPrimary)
 );
-select * from pets;
 
--- Insert for Pets --
-insert into Pets values ('Anna','Max','0502345645','Black','Male','2018-08-31',32,'Labrador','Dog');
-insert into Pets values ('Bob','Leo','0508976767','Brown and White','Male','2015-01-15',10,'Beagle','Dog');
-insert into Pets values ('Thomas','Luna','0523039378','Grey','Female','2018-06-11',28,'Greyhound','Dog');
-insert into Pets values ('Sandro','Abby','0502998765','White','Female','2012-03-01',6,'Ragdoll','Cat');
-insert into Pets values ('Sandro','Koko','0502998765','White','Male','2020-02-04',7,'Siamese','Cat');
-insert into Pets values ('Jeremy','Zoe','0506543749','Green','Female','2021-07-25',0.03,'Parrotlet','Bird');
 
 create table Customer(
 CName varchar(100),
@@ -76,13 +51,6 @@ CTPrimary varchar(10) unique,
 SPrimary int unique,
 primary key (CName, CTPrimary)
 );
-
--- Insert for Customer --
-insert into Customer values ('Anna','Springs,UAE','0502345645','0566788934');
-insert into Customer values ('Bob','Arabian Ranches,UAE','0508976767','0507867892');
-insert into Customer values ('Thomas','Arabian Ranches,UAE','0523039378','0564355628');
-insert into Customer values ('Sandro','Jumeirah Village Circle, UAE','0502998765','0507776543');
-insert into Customer values ('Jeremy','Meadows,UAE','0506543749','0503454485');
 
 create table Appointment(
 CName varchar(100),
@@ -98,6 +66,84 @@ foreign key (TPrimary) references Customer(CTPrimary),
 foreign key (PName) references Pets(PName)
 );
 
+
+create table Legal_Req(
+DName varchar(100),
+Req varchar(500),
+foreign key (DName) references Disease(DName)
+);
+
+create table Disease(
+DName varchar(50) primary key,
+DSymptoms varchar(300)
+);
+
+create table VacPet(
+CTPrimary varchar(10),
+PName varchar(100),
+VName varchar(100),
+DName varchar(50),
+VDate date, 
+primary key (CTPrimary,PName,VName,DName),
+Foreign key (CTPrimary) references Pets(CTPrimary),
+Foreign key (VName) references Vaccination(VName),
+Foreign key (DName) references Disease(DName),
+Foreign key (PName) references Pets(PName)
+);
+
+create table Vaccination(
+VName varchar(100) primary key,
+VacFrequency varchar(25),
+VacDosage int
+);
+
+-- Insert for Special Food --
+insert into SpecialFood values ('Zesty Paws, Probiotic Bites for Dogs','90 Soft Chews');
+insert into SpecialFood values ('Pet Naturals of Vermont, Daily Probiotic, For Cats','30 Soft Chews');
+
+
+-- Insert for Medicine --
+insert into medicines values ('Beaphar Fiprotec for Dogs','4 pipettes of 100mg');
+insert into medicines values ('Beaphar Fiprotec for Cats','4 pipettes of 50mg');
+insert into medicines values ('Beaphar Multi-Vit Parrots Healthcare Supplements','20 ml');
+insert into medicines values ('VetPlus Coatex for Hair and Skin Care for Dogs and Cats in Capsules','100 grams');
+
+
+-- Insert for MedInformation --
+insert into MedInformation values ('Anna','Max','Zesty Paws, Probiotic Bites for Dogs','2 per day','Gut Function, Gut Health','y',115);
+insert into MedInformation values ('Jeremy','Zoe','Beaphar Multi-Vit Parrots Healthcare Supplements','2 per day','General health','',115);
+insert into MedInformation values ('Thomas','Luna','Beaphar Fiprotec for Dogs','4 pipettes of 100mg','fleas and ticks','Part the dogs’s fur between the shoulder blades and apply the contents of one pipette to the skin’s surface, ideally split between two areas roughly 2cm apart, one at the base of the head and the second 2-3cm further back. For continuous protection re-apply once every four weeks',95);
+insert into MedInformation values ('Bob','Leo','VetPlus Coatex for Hair and Skin Care for Dogs and Cats in Capsules','1-2 per day','Skin & Coat','Up to 25 lbs, daily amount is 1 Soft Chew, 26-75 lbs, daily amount is 2 Soft Chews, Over 75 lbs, Daily amount is 3 Soft Chews',115);
+insert into MedInformation values ('Sandro','Koko','Beaphar Fiprotec for Cats','Daily dosage of 1 capsule','Hair loss, dry or reddened skin, dandruff, and flaking','Daily dosage of 1 capsule',64);
+insert into MedInformation values ('Sandro','Abby','Pet Naturals of Vermont, Daily Probiotic, For Cats','1 per day','Mucosal lining of the urinary tract','Eat 1 per day',45);
+
+
+-- Insert for MedInformation --
+insert into MedInformation values ('Anna','Max','Zesty Paws, Probiotic Bites for Dogs','2 per day','Gut Function, Gut Health','y',115);
+insert into MedInformation values ('Jeremy','Zoe','Beaphar Multi-Vit Parrots Healthcare Supplements','2 per day','General health','',115);
+insert into MedInformation values ('Thomas','Luna','Beaphar Fiprotec for Dogs','4 pipettes of 100mg','fleas and ticks','Part the dogs’s fur between the shoulder blades and apply the contents of one pipette to the skin’s surface, ideally split between two areas roughly 2cm apart, one at the base of the head and the second 2-3cm further back. For continuous protection re-apply once every four weeks',95);
+insert into MedInformation values ('Bob','Leo','VetPlus Coatex for Hair and Skin Care for Dogs and Cats in Capsules','1-2 per day','Skin & Coat','Up to 25 lbs, daily amount is 1 Soft Chew, 26-75 lbs, daily amount is 2 Soft Chews, Over 75 lbs, Daily amount is 3 Soft Chews',115);
+insert into MedInformation values ('Sandro','Koko','Beaphar Fiprotec for Cats','Daily dosage of 1 capsule','Hair loss, dry or reddened skin, dandruff, and flaking','Daily dosage of 1 capsule',64);
+insert into MedInformation values ('Sandro','Abby','Pet Naturals of Vermont, Daily Probiotic, For Cats','1 per day','Mucosal lining of the urinary tract','Eat 1 per day',45);
+
+
+-- Insert for Pets --
+insert into Pets values ('Anna','Max','0502345645','Black','Male','2018-08-31',32,'Labrador','Dog');
+insert into Pets values ('Bob','Leo','0508976767','Brown and White','Male','2015-01-15',10,'Beagle','Dog');
+insert into Pets values ('Thomas','Luna','0523039378','Grey','Female','2018-06-11',28,'Greyhound','Dog');
+insert into Pets values ('Sandro','Abby','0502998765','White','Female','2012-03-01',6,'Ragdoll','Cat');
+insert into Pets values ('Sandro','Koko','0502998765','White','Male','2020-02-04',7,'Siamese','Cat');
+insert into Pets values ('Jeremy','Zoe','0506543749','Green','Female','2021-07-25',0.03,'Parrotlet','Bird');
+
+
+-- Insert for Customer --
+insert into Customer values ('Anna','Springs,UAE','0502345645','0566788934');
+insert into Customer values ('Bob','Arabian Ranches,UAE','0508976767','0507867892');
+insert into Customer values ('Thomas','Arabian Ranches,UAE','0523039378','0564355628');
+insert into Customer values ('Sandro','Jumeirah Village Circle, UAE','0502998765','0507776543');
+insert into Customer values ('Jeremy','Meadows,UAE','0506543749','0503454485');
+
+
 -- Insert For Appointment --
 insert into Appointment values ('Anna','Max','0502345645',str_to_date("193010", "%H%i%s"),DATE_FORMAT("2020-06-15", "%Y/%m/%d"),'Doctor Visit',300);
 insert into Appointment values ('Anna','Max','0502345645',str_to_date("153510", "%H%i%s"),DATE_FORMAT("2021-06-11", "%Y/%m/%d"),'Vaccination',500);
@@ -107,12 +153,6 @@ insert into Appointment values ('Sandro','Abby','0502998765',str_to_date("153510
 insert into Appointment values ('Sandro','Abby','0502998765',str_to_date("165010", "%H%i%s"),DATE_FORMAT("2022-03-03", "%Y/%m/%d"),'Vaccination',500);
 insert into Appointment values ('Sandro','Koko','0502998765',str_to_date("153510", "%H%i%s"),DATE_FORMAT("2022-02-24", "%Y/%m/%d"),'Doctor Visit',300);
 
-
-create table Legal_Req(
-DName varchar(100),
-Req varchar(500),
-foreign key (DName) references Disease(DName)
-);
 
 -- Insert for Legal_Req --
 insert into Legal_Req values("Rabies",'Can be administered in one dose, as early as 3 months of age. States regulate the age at which it is first administered. Annual boosters are required.');
@@ -127,10 +167,6 @@ insert into Legal_Req values ('Leptospirosis', 'Currently available vaccines eff
 insert into Legal_Req values ('polyomavirus', 'Some avian veterinarians recommend vaccination starting at 21 days of age and repeat the vaccine in two weeks. They then follow the recommendation that the parrot should receive the vaccine yearly');
 insert into Legal_Req values ('Feline Panleucopaenia', 'Licensed FPV vaccine schedules generally dictate an initial subcutaneous dose at 8-9 weeks of age, followed by a booster 3-4 weeks later. This is then followed by a booster injection 12 months later, and boosters every 3 years thereafter');
 
-create table Disease(
-DName varchar(50) primary key,
-DSymptoms varchar(300)
-);
 
 -- Insert for Disease --
 insert into Disease values ("Rabies", "Flu, weakness, fever, headache");
@@ -145,18 +181,6 @@ insert into Disease values ('Leptospirosis', 'Muscle aches, vomiting, jaundice (
 insert into Disease values ('polyomavirus', 'anorexia, weight loss, delayed crop emptying, regurgitation, diarrhea, wet droppings');
 insert into Disease values ('Feline Panleucopaenia', 'vomiting, diarrhoea, anorexia');
 
-create table VacPet(
-CTPrimary varchar(10),
-PName varchar(100),
-VName varchar(100),
-DName varchar(50),
-VDate date, 
-primary key (CTPrimary,PName,VName,DName),
-Foreign key (CTPrimary) references Pets(CTPrimary),
-Foreign key (VName) references Vaccination(VName),
-Foreign key (DName) references Disease(DName),
-Foreign key (PName) references Pets(PName)
-);
 
 -- Insert for VacPet --
 -- Anna's Pet --
@@ -186,11 +210,6 @@ insert into VacPet values ('0506543749','Zoe','Nystatin','candida',DATE_FORMAT("
 
 -- End Insert for VacPets --
 
-create table Vaccination(
-VName varchar(100) primary key,
-VacFrequency varchar(25),
-VacDosage int
-);
 
 -- Insert for Vaccination --
 insert into Vaccination values ('RABVAC','Once every year',1);
@@ -225,6 +244,7 @@ select CName,PName,Fee from appointment;
 SELECT distinct CName, sum(fee) from appointment where AppDate > str_to_date('01/01/2022','%d/%m/%YY') and AppDate < str_to_date('31/01/2022','%d/%m/%YY');
 SELECT distinct CName, sum(fee) from appointment where AppDate > str_to_date('01/02/2022','%d/%m/%YY') and AppDate < str_to_date('28/02/2022','%d/%m/%YY');
 SELECT distinct CName, sum(fee) from appointment where AppDate > str_to_date('01/03/2022','%d/%m/%YY') and AppDate < str_to_date('31/03/2022','%d/%m/%YY');
+SELECT distinct CName, fee from appointment where AppDate > str_to_date('01/01/2022','%d/%m/%YY') and AppDate < str_to_date('31/03/2022','%d/%m/%YY');
 
 -- TASK 4: Show the pet with most visits --
 SELECT distinct CDName,PDName,Max(CNT) as visit from (select distinct PName as PDName,CName as CDName,count(PName) as CNT from Appointment group by CName) as subq1, appointment group by CName;
@@ -239,6 +259,12 @@ select distinct count(VName) from VacPet, Pets where VacPet.PName=Pets.PName and
 select distinct count(VName) from VacPet, Pets where VacPet.PName=Pets.PName and Spcs like 'Bird';
 
 -- Task 4: Show the name of the medicine or special food that was given to each pet. (IF statement) --
+select distinct mi.CName,mi.PName, if(p.PName=mi.PName and p.CName=mi.CName,MSFName,"") as medicine from MedInformation as mi, Pets as p;
 
 -- Task 4: Show the number of visits and amounts paid for each pet --
 select CName,PName,count(PName) as Number_of_Visits,sum(fee) from appointment group by PName;
+
+-- Task 5: For a customer and pet, you can show all the records related to the pet and total cost and number of visits
+select distinct c.CName,c.CTPrimary,vp.PName,vp.VName,vp.VDate from VacPet as vp, Pets as p, Appointment as ap, MedInformation as mi,Customer as c where c.CName=ap.CName and c.CTPrimary=ap.TPrimary and ; 
+select total_Cost from appointment,MedInformation where total_Cost = (select CName,PName,count(PName) as Number_of_Visits,sum(fee) from appointment group by PName);
+select 
