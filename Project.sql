@@ -265,6 +265,4 @@ select distinct mi.CName,mi.PName, if(p.PName=mi.PName and p.CName=mi.CName,MSFN
 select CName,PName,count(PName) as Number_of_Visits,sum(fee) from appointment group by PName;
 
 -- Task 5: For a customer and pet, you can show all the records related to the pet and total cost and number of visits
-select distinct c.CName,c.CTPrimary,vp.PName,vp.VName,vp.VDate from VacPet as vp, Pets as p, Appointment as ap, MedInformation as mi,Customer as c where c.CName=ap.CName and c.CTPrimary=ap.TPrimary and ; 
-select total_Cost from appointment,MedInformation where total_Cost = (select CName,PName,count(PName) as Number_of_Visits,sum(fee) from appointment group by PName);
-select 
+
