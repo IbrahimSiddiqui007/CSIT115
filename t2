@@ -1,0 +1,164 @@
+create database the_last_one_real_2;
+use the_last_one_real_2;
+
+/*
+teacher(tid, fname,lname, gender, department), 
+course(cid, cname, price), 
+teaching(tid,cid, hours_per_week, startdate, duration)
+*/
+
+/*TASK0: run create table and insert statements below*/
+CREATE TABLE teacher(
+tid 		INT PRIMARY KEY,
+fname 		VARCHAR(50),
+lname 		VARCHAR(50),
+gender  	CHAR(1),
+department 	VARCHAR(50)
+);
+CREATE TABLE course(
+cid 		INT PRIMARY KEY,
+cname 		VARCHAR(50),
+price 		REAL
+);
+
+INSERT INTO Teacher VALUES 
+(1,'Asma','Damankesh','F','IT'),
+(2,'Sania','Shehzad','F','IT'),
+(3,'Sara','Brown','F','HR'),
+(4,'Khaled','Shaalan','M','HR'),
+(5,'Lakshmi','Anand','F','Finance'),
+(6,'Rajith','Attupurath','M','IT'),
+(7,'Maria','Nelson','F','Marketing'),
+(8,'Zahra','Ahmed','F','Marketing'),
+(9,'Joseph','Anand','M','Management'),
+(10,'Zahra','Amiri','F','Services');
+
+INSERT INTO course VALUES
+(1,"Web Database Servers",50000), 
+(2,"Database Servers Security",60000),
+(3,"Employee Salary Re-evaluation",4000),
+(4,"Global Advertising",50000),
+(5,"Radio Advertising",7000),
+(6,"Management Guide to choosing Database",4000),
+(7,"Financial Auditing",3000);
+
+/*QUESTION1:[10 mark]
+Create table teaching(tid,cid, hours_per_week, startdate, duration)
+the last hiring date was 10th of march, make sure only start dates before this date can be inserted
+the minimum hours per week can be 4
+duration has to be either 5 or 10 weeks
+add constraints with a meaningful name for primary key and foreign key as needed 
+make sure you CANNOT delete a course that was or is being taught
+*/
+
+CREATE TABLE teaching(
+tid 		INT ,
+cid 		INT ,
+hours_per_week INT CHECK(hours_per_week>=4),
+startdate   DATE CHECK(startdate<'2022-03-10'),
+duration 	INT CHECK(duration=5 or duration=10),
+PRIMARY KEY(tid,cid),
+CONSTRAINT cfk FOREIGN KEY (cid) REFERENCES course(cid) ON DELETE No action,
+CONSTRAINT tfk FOREIGN KEY (tid) REFERENCES teacher(tid)
+);
+
+/*QUESTION2: insert following values into teaching [5 mark]
+(1,1,6,'12/02/2022',10),(2,1,6,'15/12/2021',10),
+(9,3,4,'01/03/2022',5),(8,5,8,'01/02/2022',5),
+(3,6,4,'12/02/2022',10),(1,6,4,'20/01/2022',10),
+(2,5,10,'10/11/2021',5),(2,3,4,'10/11/2021',5);
+*/
+INSERT INTO teaching VALUES
+(1,1,6,STR_TO_DATE('12/02/2022', '%d/%m/%Y'),10),
+(2,1,6,STR_TO_DATE('15/12/2021', '%d/%m/%Y'),10),
+(9,3,4,STR_TO_DATE('01/03/2022', '%d/%m/%Y'),5),
+(8,5,8,STR_TO_DATE('01/02/2022', '%d/%m/%Y'),5),
+(3,6,4,STR_TO_DATE('12/02/2022', '%d/%m/%Y'),10),
+(1,6,4,STR_TO_DATE('20/01/2022', '%d/%m/%Y'),10),
+(2,5,10,STR_TO_DATE('10/11/2021', '%d/%m/%Y'),5),
+(2,3,4,STR_TO_DATE('10/11/2021', '%d/%m/%Y'),5);
+
+/*QUESTION3: [5 Mark]
+3. make sure there are no commas at the end of the course name
+*/
+ALTER TABLE course ADD CONSTRAINT comma_constraint_real check(cname not like '%,');
+
+
+/*QUESTION4: all teachers have to work an extra 10 days after the alloted duration(in weeks) to grade exams
+ update enddate of all courses in teaching table, making sure to update it with the extension [5 mark]*/
+ALTER TABLE teaching ADD enddate DATE ;
+SET SQL_SAFE_UPDATES = 0;
+UPDATE teaching SET enddate=adddate(STARTDATE,interval duration week);
+UPDATE teaching SET enddate=adddate(enddate,interval 10 day);
+
+/* QUESTION5: its pay day. teachers earn 20 dollars in a hour.
+write a select statement to display their full name as a column named Teacher 
+along with their TOTAL salary which is 20*number of hours they teach per week*number of weeks
+note that some teachers teach multiple subjects
+display the second column as salary[10 marks]*/
+
+select concat_ws(' ',fname,lname) as 'Teacher' , sum(20*hours_per_week*duration) as 'salary' from teaching
+join teacher on teacher.tid=teaching.tid
+group by teaching.tid;
+
+/*QUESTION6: select all details about teachers 
+who are not teaching IT courses and are females[5 mark]*/
+select * from teacher where gender='F' and department!='IT';
+
+/*QUESTION7: select all teachers whose first name starts with letters between c to o and is between 5 to 6 characters in length
+and are not teaching any course [10 mark ]*/
+SELECT * FROM teacher WHERE fname REGEXP '^[c-o][a-z]{4,5}$' 
+AND tid not IN (SELECT tid FROM teaching);
+
+/*QUESTION8: show the average number of hours per week that are spent teaching each subject about databases.
+ display this average along with the subject name [5 marks]*/
+select c.cname, avg(hours_per_week) from teaching te join course c on c.cid=te.cid where c.cname like '%Database%'  group by c.cname;
+
+
+/*QUESTION9: show the teacher id along with the TOTAL number of hours per week worked by teachers
+that is GREATER than the average number of working hours in the week[10 Mark]*/
+select tid, sum(hours_per_week) from teaching group by tid having 
+sum(hours_per_week)>(select avg(hours_per_week) from teaching);
+
+
+/*QUESTION10: display course name and the price of all advertising courses, and 
+databases courses that are not about management, by displaying advertising courses first [10 mark]
+*/
+ALTER TABLE course ADD FULLTEXT(cname);
+SELECT cname, price FROM course WHERE
+MATCH(cname) AGAINST ('<Database -management >Advertising' IN BOOLEAN MODE);
+
+
+/*QUESTION11: assistants can view teacher details except their gender
+executives can view ALL teacher details and can update them too
+Amal is hired as an assistant, make sure she has assistant prieveleges
+and can pass the privilage to whoever he wants
+Amal is promoted to executive, make sure she has executive priveleges but 
+CANNOT grant these to anyone [10 mark] [10 mark]*/
+
+CREATE VIEW aut AS SELECT tid,fname,lname,department FROM teacher;
+create role 'assistant_role';
+CREATE USER amal IDENTIFIED BY '123';
+GRANT SELECT ON aut TO assistant WITH GRANT OPTION;
+Grant assistant to amal;
+revoke assistant from amal;
+create role 'executive_role';
+grant select,insert,update on teacher to executive;
+grant executive to amal;
+
+/*Question12: delete all teachers working in HR or Marketing in both teacher and teaching table. (Do not run this before getting all selects graded)[5mark]*/
+SET FOREIGN_KEY_CHECKS=0;
+DELETE tc, t FROM teaching tc JOIN teacher t ON tc.tid=t.tid
+WHERE department='HR' or department='Marketing';
+
+/*OP1: show the first name of the teacher along with the total number of hours taught per week who has the highest total number of hours taught per week [10 Mark] */
+select teacher.fname, sum(hours_per_week) as total_hours from teaching
+join teacher on teacher.tid=teaching.tid group by teaching.tid having 
+sum(hours_per_week)=(
+select max(sq.total_hours) from (select tid, sum(hours_per_week) as total_hours from teaching group by tid having 
+sum(hours_per_week))as sq,teaching);
+ 
+
+/*OP2: find out number of females or males teachers per department who are not teaching[5 Mark]*/
+select department,gender, count(*) from teacher left join teaching on teacher.tid=teaching.tid where teaching.cid is null
+group by department, gender;
